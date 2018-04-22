@@ -4,8 +4,11 @@
   "description": "Microservices made simple",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/nyc mocha tests"
   },
   "author": "Seva Maltsev",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "amqplib": "^0.5.2"
+  }
 }
