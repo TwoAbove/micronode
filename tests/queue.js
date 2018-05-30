@@ -20,12 +20,12 @@ const queueConfig = {
 
 const createQueueStub = (config = queueConfig) => {
   const queueHandler = new Queue(config);
-  Object.values(queueHandler).map(queue => {
+  Object.values(queueHandler.queues).forEach(queue => {
     queue.simulateMessage = function (data) {
-      const message = this.createMessageObj(data);
-      this.onMessage(message);
+      this.emit('message', data);
     }
   });
+  return queueHandler;
 }
 
 describe('Queue', () => {
@@ -40,19 +40,22 @@ describe('Queue', () => {
     it('Should recieve messages using the onMessage funciton', () => {
       const queue = createQueueStub().queues.queueOne;
       let m;
-      queue.onMessage((message) => { m = message; });
+      queue.on('message', message => { m = message; });
       queue.simulateMessage({ hello: true });
       expect(m).to.be.an('object').and.have.all.keys('hello');
 
     });
     it('Should have ack and nack when configured', () => {
       const queueHandler = createQueueStub();
-      queueHandler.queues.queueOne.simulateMessage({ hello: true });
-      queueHandler.queues.queueOne.ack.to.be.an.instanceof('function');
-      queueHandler.queues.queueOne.nack.to.be.an.instanceof('function');
+      const queue = createQueueStub().queues.queueOne;
+      let m;
+      queue.on('message', message => { m = message; });
+      queue.simulateMessage({ hello: true });
+      expect(typeof m.ack).to.equal('function');
+      expect(typeof m.nack).to.equal('function');
     });
     it('Should throw if ack or nack is called when not configured');
-    it('Should call worker() when a message is found');
+    it('Should emit "message" when a message is found');
     describe('worker()', () => {
       it('Should be called when a message is recieved from queue');
       it('Should contain message');
