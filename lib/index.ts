@@ -7,7 +7,7 @@ import {
 	IQueueHandlerConfig,
 	IQueueConfig
 } from './queues/queueConfig';
-import BaseQueue from './queues/BaseQueue';
+import BaseQueue, { IMessage } from './queues/BaseQueue';
 
 import amqp, { AmqpConnectionManager } from 'amqp-connection-manager';
 
@@ -109,3 +109,8 @@ export class QueueHandler extends EventEmitter {
 // ]);
 
 export default QueueHandler;
+export {
+	IQueueHandlerConfig,
+	IQueueConfig,
+	IMessage,
+}

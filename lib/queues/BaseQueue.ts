@@ -15,7 +15,7 @@ const randomString = () =>
 		.toString(36)
 		.substr(2, 10);
 
-interface IMessage {
+export interface IMessage {
 	body: any;
 	priority: any;
 	correlationId: any;
