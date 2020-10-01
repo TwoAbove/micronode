@@ -1,6 +1,6 @@
 {
   "name": "micronode",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Microservices made simple",
   "main": "lib/index.js",
   "scripts": {
