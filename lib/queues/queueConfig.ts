@@ -10,7 +10,7 @@ export interface IQueueConfig {
 export interface IQueueHandlerConfig {
 	appName: string;
 	defaultQueueConfig: Omit<IQueueConfig, 'messageBodySchema'>;
-	queues: { [key: string]: Partial<IQueueConfig> };
+	queues: Record<string, Partial<IQueueConfig>>;
 }
 
 // const defaultConfig: IQueueHandlerConfig = {

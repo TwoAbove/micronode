@@ -6,7 +6,7 @@ import { IQueueHandlerConfig } from '../lib/queues/queueConfig';
 
 const expect = chai.expect;
 
-const stubQueueConfig: IQueueHandlerConfig = {
+const stubQueueConfig = {
 	appName: 'appName',
 	defaultQueueConfig: {
 		exchange: 'exchange',
@@ -30,6 +30,7 @@ const stubQueueConfig: IQueueHandlerConfig = {
 		}
 	}
 };
+
 const stubConnectionUrls = ['url'];
 
 interface StubbedQueue extends BaseQueue {
@@ -42,7 +43,7 @@ const createQueueStub = (
 ) => {
 	const queueHandler = new Queue(config, connectionUrls);
 	Object.values(queueHandler.queues).forEach((queue: StubbedQueue) => {
-		queue.simulateMessage = function(data) {
+		queue.simulateMessage = function (data) {
 			this.emit('message', data);
 		};
 	});
@@ -51,12 +52,16 @@ const createQueueStub = (
 
 describe('Queue', () => {
 	it('Should not throw on create', () => {
-		const queueHandler = new Queue(stubQueueConfig, stubConnectionUrls);
+		type Keys = typeof stubQueueConfig.queues;
+		const queueHandler = new Queue<Keys>(stubQueueConfig, stubConnectionUrls);
+		queueHandler.queues.queueOne;
 	});
+
 	it('Should have queues property that contains all configured queues', () => {
 		const queueHandler = new Queue(stubQueueConfig, stubConnectionUrls);
 		expect(queueHandler.queues).to.have.all.keys('queueOne', 'queueTwo');
 	});
+
 	describe('.queues.someQueue message', () => {
 		it('Should recieve messages using the onMessage funciton', () => {
 			const queue = createQueueStub().queues.queueOne as StubbedQueue;

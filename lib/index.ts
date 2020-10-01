@@ -22,20 +22,18 @@ function validateConfig(config) {
 	return { valid, errors: validate.errors };
 }
 
+// type queueKeys = { [key: keyof IQueueHandlerConfig['queues']]: BaseQueue }
 
-export class QueueHandler extends EventEmitter {
-	public queues: { [key: string]: BaseQueue } = {};
-
+export class QueueHandler<T = any> extends EventEmitter {
 	private connection: AmqpConnectionManager;
 	private disconnectTimeoutHandler?: NodeJS.Timer;
-	private config: IQueueHandlerConfig;
-	private connectionUrls: string[];
+	public queues: Record<keyof T, BaseQueue> = {} as any;
 
 	/**
 	* Creates a queue handler. The config should be consistent throughout initialized handlers.
 	* @param config {IQueueHandlerConfig}
 	*/
-	constructor(config: IQueueHandlerConfig, connectionUrls: string[]) {
+	constructor(private readonly config: IQueueHandlerConfig, private readonly connectionUrls: string[]) {
 		super();
 
 		const configValidationResult = validateConfig(config);
@@ -43,7 +41,6 @@ export class QueueHandler extends EventEmitter {
 			configValidationResult.valid,
 			'config invalid: ' + configValidationResult.errors
 		);
-		this.config = config;
 
 		assert(
 			Array.isArray(connectionUrls),
@@ -51,7 +48,6 @@ export class QueueHandler extends EventEmitter {
 		);
 		assert(connectionUrls.length, '<connectionUrls> array must not be empty');
 
-		this.connectionUrls = connectionUrls;
 		this.buildApi();
 	}
 
