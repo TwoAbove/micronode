@@ -47,7 +47,7 @@ class BaseQueue extends EventEmitter {
 
 	private globalEmit: (event: string | symbol, ...args: any[]) => boolean;
 	private getConnection: () => AmqpConnectionManager;
-	private worker: (IMessage) => void;
+	private worker: (message: IMessage) => void;
 
 	constructor(
 		name: string,
@@ -119,7 +119,7 @@ class BaseQueue extends EventEmitter {
 		this.channelEstablished = true;
 	}
 
-	public listen(worker: (IMessage) => void, concurrency = 1) {
+	public listen(worker: (message: IMessage) => void, concurrency = 1) {
 		assert(!this.listening, 'Should only start listening one time');
 
 		this.worker = worker;
