@@ -74,7 +74,7 @@ class BaseQueue extends EventEmitter {
 		const connection = this.getConnection();
 		this.channelWrapper = connection.createChannel({
 			// json: true,
-			setup: async function(channel: ConfirmChannel) {
+			setup: async function (channel: ConfirmChannel) {
 				// console.log('channel', channel);
 				// `channel` here is a regular amqplib `ConfirmChannel`.
 				// Note that `this` here is the channelWrapper instance.
@@ -119,9 +119,8 @@ class BaseQueue extends EventEmitter {
 		this.channelEstablished = true;
 	}
 
-	public listen({ worker, concurrency = 1 }) {
+	public listen(worker: (IMessage) => void, concurrency = 1) {
 		assert(!this.listening, 'Should only start listening one time');
-		assert(typeof worker === 'function', 'Should provide a <worker> function');
 
 		this.worker = worker;
 		this.concurrency = concurrency;
