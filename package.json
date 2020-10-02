@@ -1,8 +1,8 @@
 {
   "name": "micronode",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Microservices made simple",
-  "main": "lib/index.js",
+  "main": "lib/index.ts",
   "scripts": {
     "test": "./node_modules/.bin/nyc mocha -r ts-node/register tests/**"
   },
