@@ -1,11 +1,13 @@
 {
   "name": "micronode",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "type": "module",
   "description": "Microservices made simple",
-  "main": "lib/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "./node_modules/.bin/nyc mocha -r ts-node/register tests/**"
+    "test": "./node_modules/.bin/nyc mocha -r ts-node/register tests/**",
+    "build": "tsc"
   },
   "author": "Seva Maltsev",
   "license": "MIT",

@@ -1,10 +1,12 @@
 {
+  "declaration": true,
   "compilerOptions": {
+    "outDir": "dist",
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "lib": ["es6"],
+    "lib": ["es2017", "es7", "es6", "dom"],
     "module": "commonjs",
     "pretty": true,
     "sourceMap": true,
@@ -14,5 +16,5 @@
     "typeRoots": ["node_modules/@types"]
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": ["node_modules", "**/*.spec.ts", "dist"]
 }
