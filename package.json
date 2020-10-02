@@ -1,6 +1,7 @@
 {
   "name": "micronode",
-  "version": "1.0.5",
+  "version": "1.0.6",
+  "type": "module",
   "description": "Microservices made simple",
   "main": "lib/index.ts",
   "scripts": {
