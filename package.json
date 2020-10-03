@@ -1,12 +1,12 @@
 {
   "name": "micronode",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Microservices made simple",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "./node_modules/.bin/nyc mocha -r ts-node/register tests/**",
-    "build": "tsc"
+    "build": "tsc --declaration --declarationMap"
   },
   "author": "Seva Maltsev",
   "license": "MIT",
@@ -16,7 +16,6 @@
     "ajv": "^6.12.5",
     "amqp-connection-manager": "^3.2.0",
     "amqplib": "^0.5.6",
-    "assert": "^2.0.0",
     "typescript": "3.9.4"
   },
   "devDependencies": {
