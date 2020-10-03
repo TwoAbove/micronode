@@ -1,9 +1,9 @@
 {
   "name": "micronode",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Microservices made simple",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
     "test": "./node_modules/.bin/nyc mocha -r ts-node/register tests/**",
     "build": "tsc --declaration --declarationMap"
