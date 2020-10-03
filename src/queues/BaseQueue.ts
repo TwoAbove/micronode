@@ -2,8 +2,8 @@ import assert from 'assert';
 import { EventEmitter } from 'events';
 import Ajv from 'ajv';
 import { AmqpConnectionManager, ChannelWrapper } from 'amqp-connection-manager';
-import { ConfirmChannel, Options } from 'amqplib';
-import { IQueueConfig } from './queueConfig';
+import { ConfirmChannel, Message, Options } from 'amqplib';
+import { IFullQueueConfig, IQueueConfig } from './queueConfig';
 
 import deserialize from './deserialize';
 import serialize from './serialize';
@@ -32,37 +32,27 @@ export interface IMessage {
 }
 
 class BaseQueue extends EventEmitter {
-	private config: IQueueConfig;
-	private name: string;
-	private appName: string;
 	private key: string;
-	private consumerTag: string;
-	private concurrency: number;
+	private consumerTag!: string;
+	private concurrency!: number;
 	private channelEstablished = false;
 	private listening = false;
 	private connected = false;
-	private shouldStartConsuming: boolean;
-	private channelWrapper: ChannelWrapper;
+	private shouldStartConsuming!: boolean;
+	private channelWrapper!: ChannelWrapper;
 	private validateMessageBody: Ajv.ValidateFunction;
 
-	private globalEmit: (event: string | symbol, ...args: any[]) => boolean;
-	private getConnection: () => AmqpConnectionManager;
-	private worker: (message: IMessage) => void;
+	private worker!: (message: IMessage) => void;
 
 	constructor(
-		name: string,
-		appName: string,
-		config: IQueueConfig,
-		globalEmit: (event: string | symbol, ...args: any[]) => boolean,
-		getConnection: () => AmqpConnectionManager
+		private name: string,
+		private appName: string,
+		private config: IFullQueueConfig,
+		private globalEmit: (event: string | symbol, ...args: any[]) => boolean,
+		private getConnection: () => AmqpConnectionManager
 	) {
 		super();
-		this.name = name;
-		this.appName = appName;
 		this.key = `${appName}.${name}`;
-		this.config = config;
-		this.getConnection = getConnection;
-		this.globalEmit = globalEmit;
 		this.validateMessageBody = ajv.compile(config.messageBodySchema);
 		this.setupChannel();
 	}
@@ -159,14 +149,14 @@ class BaseQueue extends EventEmitter {
 		);
 
 		return this.getChannel()
-			.addSetup(channel => channel.cancel(this.consumerTag))
+			.addSetup((channel: any) => channel.cancel(this.consumerTag))
 			.then(() => {
 				this.listening = false;
 				return true;
 			});
 	}
 
-	publish(body, properties: any = {}) {
+	publish(body: any, properties: any = {}) {
 		assert(
 			this.validateMessageBody(body),
 			ajv.errorsText(this.validateMessageBody.errors)
@@ -181,7 +171,8 @@ class BaseQueue extends EventEmitter {
 			appId: this.appName
 		};
 
-		['priority', 'correlationId', 'messageId', 'type'].forEach(property => {
+		const allowedProperties = <const>['priority', 'correlationId', 'messageId', 'type'];
+		allowedProperties.forEach(property => {
 			if (properties[property]) {
 				options[property] = properties[property];
 			}
@@ -208,7 +199,7 @@ class BaseQueue extends EventEmitter {
 		return this.channelWrapper;
 	}
 
-	messageHandler(originalMessage) {
+	messageHandler(originalMessage: Message | null) {
 		if (originalMessage === null) {
 			this.complexEmit('error', new Error('Consumer was canceled by broker'));
 			return;
@@ -247,7 +238,7 @@ class BaseQueue extends EventEmitter {
 		this.worker(message);
 	}
 
-	complexEmit(eventName, ...props) {
+	complexEmit(eventName: string, ...props: any[]) {
 		this.emit(eventName, ...props);
 		this.globalEmit(`${this.name}:${eventName}`, ...props);
 	}

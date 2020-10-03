@@ -3,7 +3,7 @@ import { EventEmitter } from 'events';
 import { IQueueHandlerConfig, IQueueConfig } from './queues/queueConfig';
 import BaseQueue, { IMessage } from './queues/BaseQueue';
 import amqp from 'amqp-connection-manager';
-export declare class QueueHandler<T = any> extends EventEmitter {
+export declare class QueueHandler<T = Record<string, any>> extends EventEmitter {
     private readonly config;
     private readonly connectionUrls;
     private connection;
@@ -20,4 +20,3 @@ export declare class QueueHandler<T = any> extends EventEmitter {
 }
 export default QueueHandler;
 export { IQueueHandlerConfig, IQueueConfig, IMessage, };
-//# sourceMappingURL=index.d.ts.map

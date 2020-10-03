@@ -34,4 +34,3 @@ declare const _default: {
     additionalProperties: boolean;
 };
 export default _default;
-//# sourceMappingURL=queueConfigSchema.d.ts.map

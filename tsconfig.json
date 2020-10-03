@@ -1,21 +1,19 @@
 {
-  "declaration": true,
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "lib": ["es6"],
-    "allowJs": true,
-    "outDir": "build",
-    "rootDir": "src",
-    "allowSyntheticDefaultImports": true,
-    "emitDecoratorMetadata": true,
+    "allowJs": false,
+    "declaration": true,
     "esModuleInterop": true,
-    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "Node",
+    "module": "ES2020",
+    "outDir": "build/esm",
     "pretty": true,
+    "rootDir": "src",
     "sourceMap": true,
+    "strict": true,
     "strictNullChecks": true,
+    "target": "ES2017",
     "typeRoots": ["node_modules/@types"]
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts", "dist"]
+  "include": ["src/**/*"]
 }

@@ -4,4 +4,3 @@ declare const serialize: (content: any) => {
     contentType: string;
 };
 export default serialize;
-//# sourceMappingURL=serialize.d.ts.map

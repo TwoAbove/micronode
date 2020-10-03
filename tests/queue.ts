@@ -1,8 +1,8 @@
 import chai from 'chai';
 
-import Queue from '../lib';
-import BaseQueue from '../lib/queues/BaseQueue';
-import { IQueueHandlerConfig } from '../lib/queues/queueConfig';
+import Queue from '../src';
+import BaseQueue, { IMessage } from '../src/queues/BaseQueue';
+import { IQueueHandlerConfig } from '../src/queues/queueConfig';
 
 const expect = chai.expect;
 
@@ -78,16 +78,16 @@ describe('Queue', () => {
 			const queueHandler = createQueueStub();
 			const queue = createQueueStub().queues.queueOne as StubbedQueue;
 			let m;
-			queue.listen({
-				worker: message => {
+			queue.listen(
+				(message: IMessage) => {
 					m = message;
 				}
-			});
+			);
 			queue.messageHandler({
 				properties: { contentType: 'text/plain' },
 				fields: {},
 				content: Buffer.from('Test')
-			});
+			} as any);
 			expect(typeof m.ack).to.equal('function');
 			expect(typeof m.nack).to.equal('function');
 		});

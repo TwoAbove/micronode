@@ -1,7 +1,8 @@
 /// <reference types="node" />
 import { EventEmitter } from 'events';
 import { AmqpConnectionManager, ChannelWrapper } from 'amqp-connection-manager';
-import { IQueueConfig } from './queueConfig';
+import { Message } from 'amqplib';
+import { IFullQueueConfig } from './queueConfig';
 export interface IMessage {
     body: any;
     priority: any;
@@ -17,9 +18,11 @@ export interface IMessage {
     nack?: () => void;
 }
 declare class BaseQueue extends EventEmitter {
-    private config;
     private name;
     private appName;
+    private config;
+    private globalEmit;
+    private getConnection;
     private key;
     private consumerTag;
     private concurrency;
@@ -29,18 +32,15 @@ declare class BaseQueue extends EventEmitter {
     private shouldStartConsuming;
     private channelWrapper;
     private validateMessageBody;
-    private globalEmit;
-    private getConnection;
     private worker;
-    constructor(name: string, appName: string, config: IQueueConfig, globalEmit: (event: string | symbol, ...args: any[]) => boolean, getConnection: () => AmqpConnectionManager);
+    constructor(name: string, appName: string, config: IFullQueueConfig, globalEmit: (event: string | symbol, ...args: any[]) => boolean, getConnection: () => AmqpConnectionManager);
     private setupChannel;
     listen(worker: (message: IMessage) => void, concurrency?: number): Promise<void>;
     private addConsumeSetup;
     stopListening(): Promise<boolean>;
     publish(body: any, properties?: any): Promise<void>;
     getChannel(): ChannelWrapper;
-    messageHandler(originalMessage: any): void;
-    complexEmit(eventName: any, ...props: any[]): void;
+    messageHandler(originalMessage: Message | null): void;
+    complexEmit(eventName: string, ...props: any[]): void;
 }
 export default BaseQueue;
-//# sourceMappingURL=BaseQueue.d.ts.map

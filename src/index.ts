@@ -5,7 +5,7 @@ import Ajv from 'ajv';
 import queueConfigSchema from './queues/queueConfigSchema';
 import {
 	IQueueHandlerConfig,
-	IQueueConfig
+	IQueueConfig, IFullQueueConfig
 } from './queues/queueConfig';
 import BaseQueue, { IMessage } from './queues/BaseQueue';
 
@@ -14,7 +14,7 @@ import amqp, { AmqpConnectionManager } from 'amqp-connection-manager';
 const DISCONNECT_TIMEOUT = 60 * 1000;
 // const RABBIT_MQ_CONNECT_STRING = process.env.RABBIT_MQ_CONNECT_STRING as string;
 
-function validateConfig(config) {
+function validateConfig(config: IQueueHandlerConfig) {
 	const ajv = new Ajv();
 	const validate = ajv.compile(queueConfigSchema);
 	const valid = validate(config);
@@ -22,12 +22,10 @@ function validateConfig(config) {
 	return { valid, errors: validate.errors };
 }
 
-// type queueKeys = { [key: keyof IQueueHandlerConfig['queues']]: BaseQueue }
-
-export class QueueHandler<T = any> extends EventEmitter {
-	private connection: AmqpConnectionManager;
+export class QueueHandler<T = Record<string, any>> extends EventEmitter {
+	private connection!: AmqpConnectionManager;
 	private disconnectTimeoutHandler?: NodeJS.Timer;
-	public queues: Record<keyof T, BaseQueue> = {} as any;
+	public queues!: Record<keyof T, BaseQueue>;
 
 	/**
 	* Creates a queue handler. The config should be consistent throughout initialized handlers.
@@ -58,8 +56,9 @@ export class QueueHandler<T = any> extends EventEmitter {
 			const builtConfig = {
 				...defaultConfig,
 				...config
-			} as IQueueConfig;
-			this.queues[queueName] = new BaseQueue(
+			};
+			// TODO: Get this type working
+			(this.queues as any)[queueName] = new BaseQueue(
 				queueName,
 				this.config.appName,
 				builtConfig,

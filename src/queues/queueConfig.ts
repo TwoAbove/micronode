@@ -1,42 +1,19 @@
-export interface IQueueConfig {
+export interface IDefaultQueueConfig {
 	exchange: string;
 	deferredExchange: string;
 	deadLetterExchange: string;
 	durable: boolean;
 	ack: boolean;
-	messageBodySchema: any;
 }
+
+export type IQueueConfig = {
+	messageBodySchema: any;
+} & Partial<IDefaultQueueConfig>;
+
+export type IFullQueueConfig = Required<IDefaultQueueConfig> & IQueueConfig;
 
 export interface IQueueHandlerConfig {
 	appName: string;
-	defaultQueueConfig: Omit<IQueueConfig, 'messageBodySchema'>;
-	queues: Record<string, Partial<IQueueConfig>>;
+	defaultQueueConfig: IDefaultQueueConfig;
+	queues: Record<string, IQueueConfig>;
 }
-
-// const defaultConfig: IQueueHandlerConfig = {
-// 	defaultQueueConfig: {
-// 		exchange: 'pricemon',
-// 		deferredExchange: 'pricemon-deferred',
-// 		deadLetterExchange: 'x-dead-pricemon',
-// 		durable: false,
-// 		ack: true
-// 	},
-// 	queues: {
-// 		'email-verification': {
-// 			durable: true,
-// 			ack: true,
-// 			messageBodySchema: {
-// 				type: 'object',
-// 				properties: {
-// 					flowId: { type: 'string' },
-// 					user: { type: 'object' },
-// 					linkUrl: { type: 'string' }
-// 				},
-// 				required: ['flowId']
-// 			}
-// 		},
-// 		// 'email-update': {}
-// 	}
-// };
-
-// export default defaultConfig;
