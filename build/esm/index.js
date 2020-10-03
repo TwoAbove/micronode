@@ -22,6 +22,7 @@ export class QueueHandler extends EventEmitter {
         super();
         this.config = config;
         this.connectionUrls = connectionUrls;
+        this.queues = {};
         const configValidationResult = validateConfig(config);
         assert(configValidationResult.valid, 'config invalid: ' + configValidationResult.errors);
         assert(Array.isArray(connectionUrls), '<connectionUrls> must be an array of strings');

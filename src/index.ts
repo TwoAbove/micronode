@@ -25,7 +25,7 @@ function validateConfig(config: IQueueHandlerConfig) {
 export class QueueHandler<T = Record<string, any>> extends EventEmitter {
 	private connection!: AmqpConnectionManager;
 	private disconnectTimeoutHandler?: NodeJS.Timer;
-	public queues!: Record<keyof T, BaseQueue>;
+	public queues: Record<keyof T, BaseQueue> = {} as Record<keyof T, BaseQueue>;
 
 	/**
 	* Creates a queue handler. The config should be consistent throughout initialized handlers.

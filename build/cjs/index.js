@@ -28,6 +28,7 @@ class QueueHandler extends events_1.EventEmitter {
         super();
         this.config = config;
         this.connectionUrls = connectionUrls;
+        this.queues = {};
         const configValidationResult = validateConfig(config);
         assert_1.default(configValidationResult.valid, 'config invalid: ' + configValidationResult.errors);
         assert_1.default(Array.isArray(connectionUrls), '<connectionUrls> must be an array of strings');
