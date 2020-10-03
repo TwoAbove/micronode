@@ -1,6 +1,6 @@
 {
   "name": "micronode",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Microservices made simple",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
