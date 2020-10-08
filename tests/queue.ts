@@ -54,7 +54,10 @@ describe('Queue', () => {
 	it('Should not throw on create', () => {
 		type Keys = typeof stubQueueConfig.queues;
 		const queueHandler = new Queue<Keys>(stubQueueConfig, stubConnectionUrls);
-		queueHandler.queues.queueOne;
+		queueHandler.queues.queueOne.listen<{ test: string }>(
+			(message) => { },
+			0
+		);
 	});
 
 	it('Should have queues property that contains all configured queues', () => {

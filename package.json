@@ -1,6 +1,6 @@
 {
   "name": "micronode",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Microservices made simple",
   "main": "./build/cjs/index.js",
   "module": "./build/esm/index.js",

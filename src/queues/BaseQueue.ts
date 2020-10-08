@@ -15,8 +15,8 @@ const randomString = () =>
 		.toString(36)
 		.substr(2, 10);
 
-export interface IMessage {
-	body: any;
+export interface IMessage<T = any> {
+	body: T;
 	priority: any;
 	correlationId: any;
 	messageId: any;
@@ -31,6 +31,8 @@ export interface IMessage {
 	nack?: () => void;
 }
 
+type Worker<T = any> = (message: IMessage<T>) => void
+
 class BaseQueue extends EventEmitter {
 	private key: string;
 	private consumerTag!: string;
@@ -42,7 +44,7 @@ class BaseQueue extends EventEmitter {
 	private channelWrapper!: ChannelWrapper;
 	private validateMessageBody: Ajv.ValidateFunction;
 
-	private worker!: (message: IMessage) => void;
+	private worker!: Worker;
 
 	constructor(
 		private name: string,
@@ -109,7 +111,7 @@ class BaseQueue extends EventEmitter {
 		this.channelEstablished = true;
 	}
 
-	public listen(worker: (message: IMessage) => void, concurrency = 1) {
+	public listen<T = any>(worker: Worker<T>, concurrency = 1) {
 		assert(!this.listening, 'Should only start listening one time');
 
 		this.worker = worker;
