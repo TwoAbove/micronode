@@ -39,7 +39,7 @@ declare class BaseQueue extends EventEmitter {
     listen<T = any>(worker: Worker<T>, concurrency?: number): Promise<void>;
     private addConsumeSetup;
     stopListening(): Promise<boolean>;
-    publish(body: any, properties?: any): Promise<void>;
+    publish<T = any>(body: T, properties?: any): Promise<void>;
     getChannel(): ChannelWrapper;
     messageHandler(originalMessage: Message | null): void;
     complexEmit(eventName: string, ...props: any[]): void;

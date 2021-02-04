@@ -158,7 +158,7 @@ class BaseQueue extends EventEmitter {
 			});
 	}
 
-	publish(body: any, properties: any = {}) {
+	publish<T = any>(body: T, properties: any = {}) {
 		assert(
 			this.validateMessageBody(body),
 			ajv.errorsText(this.validateMessageBody.errors)
